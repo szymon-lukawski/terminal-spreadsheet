@@ -68,9 +68,11 @@ class Spreadsheet:
 
     def _format_cell(self, cell, col_idx, col_lens):
         if cell is not None:
-            col_lens[col_idx] = max(col_lens[col_idx], len(cell))
-            return str(cell)
-        return self._empty_cell_repr
+            cell_str = str(cell)
+            col_lens[col_idx] = max(col_lens[col_idx], len(cell_str))
+            
+            return " "*(col_lens[col_idx]-len(cell_str)) + cell_str
+        return " "*(col_lens[col_idx]-len(self._empty_cell_repr)) + self._empty_cell_repr
 
     def _generate_column_titles(self, col_lens):
         col_title_line = [len(str(self.n_rows)) * " "]
@@ -89,7 +91,9 @@ class Spreadsheet:
         return ascii_uppercase[col_idx]
 
     def _col_str_to_idx(self, col_str: str):
-        pass
+        if len(col_str) > 1:
+            raise NotImplementedError("Column index can be 0-25 for now!")
+        return ascii_uppercase.index(col_str)
 
     def _get_coordinates_from_(self, address: str):
         index = 0
