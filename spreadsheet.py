@@ -12,6 +12,9 @@ class Cell:
 
     def __str__(self):
         return str(self.value)
+    
+    def __len__(self):
+        return len(self.value)
 
     def refresh(self):
         if self.formula and len(self.formula) > 0 and self.formula[0] == '=':
@@ -33,7 +36,7 @@ class Spreadsheet:
     def refresh(self):
         for row in self.grid:
             for cell in row:
-                if cell:
+                if cell is not None:
                     cell.refresh()
 
     def _create_empty_grid(self, n_columns, n_rows):
@@ -64,7 +67,7 @@ class Spreadsheet:
         return self._col_sep.join(line)
 
     def _format_cell(self, cell, col_idx, col_lens):
-        if cell:
+        if cell is not None:
             col_lens[col_idx] = max(col_lens[col_idx], len(cell))
             return str(cell)
         return self._empty_cell_repr
