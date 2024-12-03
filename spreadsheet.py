@@ -1,6 +1,15 @@
 from string import ascii_uppercase
+
+
 class Cell:
-    pass
+    def __init__(self, value: str):
+        self.value = value
+
+    def __repr__(self):
+        pass
+
+    def __str__(self):
+        pass
 
 
 class Spreadsheet:
@@ -56,19 +65,29 @@ class Spreadsheet:
         padding = (max_col_len - len(col_title)) * " "
         return padding + col_title
 
-
-    def _col_idx_to_str(self, col_idx):
-        if col_idx > 25: 
+    def _col_idx_to_str(self, col_idx: int):
+        if col_idx > 25:
             raise NotImplementedError("Column index can be 0-25 for now!")
         return ascii_uppercase[col_idx]
 
-        
+    def _col_str_to_idx(self, col_str: str):
+        pass
 
+    def _get_coordinates_from_(self, address: str):
+        index = 0
+        for i, letter in enumerate(address):
+            if letter not in ascii_uppercase:
+                index = i
+                break
+        return self._col_str_to_idx(address[:index]), int(address[index:])
 
-                
-
-
-        
+    def _add_new_cell(self, col_idx: int, row_idx: int, value: str):
+        self.grid[col_idx][row_idx] = Cell(value)
 
     def change_(self, address: str, value: str):
-        pass
+        col_idx, row_idx = self._get_coordinates_from_(address)
+        cell_to_change = self.grid[col_idx][row_idx]
+        if cell_to_change:
+            cell_to_change.value = value
+        else:
+            self._add_new_cell(col_idx, row_idx, value)
