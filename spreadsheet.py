@@ -8,10 +8,10 @@ class Cell:
         self.value = None
 
     def __repr__(self):
-        pass
+        return self.formula
 
     def __str__(self):
-        pass
+        return str(self.value)
 
     def refresh(self):
         if self.formula and len(self.formula) > 0 and self.formula[0] == '=':
