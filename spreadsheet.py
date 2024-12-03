@@ -2,8 +2,8 @@ from string import ascii_uppercase
 
 
 class Cell:
-    def __init__(self, value: str):
-        self.value = value
+    def __init__(self, formula: str):
+        self.formula = formula
 
     def __repr__(self):
         pass
@@ -81,13 +81,13 @@ class Spreadsheet:
                 break
         return self._col_str_to_idx(address[:index]), int(address[index:])
 
-    def _add_new_cell(self, col_idx: int, row_idx: int, value: str):
-        self.grid[col_idx][row_idx] = Cell(value)
+    def _add_new_cell(self, col_idx: int, row_idx: int, formula: str):
+        self.grid[col_idx][row_idx] = Cell(formula)
 
-    def change_(self, address: str, value: str):
+    def change_(self, address: str, formula: str):
         col_idx, row_idx = self._get_coordinates_from_(address)
         cell_to_change = self.grid[col_idx][row_idx]
         if cell_to_change:
-            cell_to_change.value = value
+            cell_to_change.formula = formula
         else:
-            self._add_new_cell(col_idx, row_idx, value)
+            self._add_new_cell(col_idx, row_idx, formula)
