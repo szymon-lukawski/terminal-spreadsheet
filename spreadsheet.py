@@ -16,30 +16,46 @@ class Spreadsheet:
         self.grid = [[None for _ in range(n_columns)] for _ in range(n_rows)]
 
     def __str__(self):
-        lines = []
-        lines.append(self.name)
-        lines.append("") # Placeholder for column name row
-        col_lens = [1 for _ in range(self.n_columns)]
-        for row_i, row in enumerate(self.grid):
-            row_title_padding = (len(str(self.n_rows)) - len(str(row_i+1))) * " "
-            line = [str(row_i+1) + row_title_padding]
-            for col_idx, cell in enumerate(row):
-                if cell:
-                    col_lens[col_idx] = max(col_lens[col_idx], len(cell))
-                    line.append(str(cell)) # add padding 
-                else:
-                    # cell is None
-                    line.append(self._empty_cell_repr)
-            line = self._col_sep.join(line)
-            lines.append(line)
-        col_title_line = [len(str(self.n_rows))* " "]
-        for col_i, max_col_len in enumerate(col_lens):
-            col_title = self._col_idx_to_str(col_i)
-            len_col_title = len(col_title)
-            padded_col_title = (max_col_len-len_col_title) * " " + col_title # this line needs to be changed if different allignment
-            col_title_line.append(padded_col_title)
-        lines[1] = self._col_sep.join(col_title_line)
+        lines = [self.name, ""]  # Add name and placeholder for column names
+        col_lens = self._initialize_column_lengths()
+        lines.extend(self._generate_row_lines(col_lens))
+        lines[1] = self._generate_column_titles(col_lens)
         return "\n".join(lines)
+
+    def _initialize_column_lengths(self):
+        return [1 for _ in range(self.n_columns)]
+
+    def _generate_row_lines(self, col_lens):
+        lines = []
+        for row_i, row in enumerate(self.grid):
+            line = self._generate_row_line(row, row_i, col_lens)
+            lines.append(line)
+        return lines
+
+    def _generate_row_line(self, row, row_i, col_lens):
+        row_title_padding = (len(str(self.n_rows)) - len(str(row_i + 1))) * " "
+        line = [str(row_i + 1) + row_title_padding]
+        for col_idx, cell in enumerate(row):
+            line.append(self._format_cell(cell, col_idx, col_lens))
+        return self._col_sep.join(line)
+
+    def _format_cell(self, cell, col_idx, col_lens):
+        if cell:
+            col_lens[col_idx] = max(col_lens[col_idx], len(cell))
+            return str(cell)
+        return self._empty_cell_repr
+
+    def _generate_column_titles(self, col_lens):
+        col_title_line = [len(str(self.n_rows)) * " "]
+        for col_i, max_col_len in enumerate(col_lens):
+            col_title_line.append(self._format_column_title(col_i, max_col_len))
+        return self._col_sep.join(col_title_line)
+
+    def _format_column_title(self, col_idx, max_col_len):
+        col_title = self._col_idx_to_str(col_idx)
+        padding = (max_col_len - len(col_title)) * " "
+        return padding + col_title
+
 
     def _col_idx_to_str(self, col_idx):
         if col_idx > 25: 
