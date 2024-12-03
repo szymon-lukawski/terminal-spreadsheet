@@ -1,0 +1,7 @@
+[project]
+name = "terminal-spreadsheet"
+version = "0.1.0"
+description = "Re-take of my first programming project after ~3 years"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = []
