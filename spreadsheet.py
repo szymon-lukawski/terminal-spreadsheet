@@ -1,15 +1,24 @@
 from string import ascii_uppercase
+from parsing import parse_formula
 
 
 class Cell:
     def __init__(self, formula: str):
         self.formula = formula
+        self.value = None
 
     def __repr__(self):
         pass
 
     def __str__(self):
         pass
+
+    def refresh(self):
+        if self.formula and len(self.formula) > 0 and self.formula[0] == '=':
+            self.value = parse_formula(self.formula)
+        else:
+            self.value = self.formula
+
 
 
 class Spreadsheet:
@@ -20,6 +29,12 @@ class Spreadsheet:
         self._create_empty_grid(*dims)
         self._col_sep = "|"
         self._empty_cell_repr = " "
+
+    def refresh(self):
+        for row in self.grid:
+            for cell in row:
+                if cell:
+                    cell.refresh()
 
     def _create_empty_grid(self, n_columns, n_rows):
         self.grid = [[None for _ in range(n_columns)] for _ in range(n_rows)]
