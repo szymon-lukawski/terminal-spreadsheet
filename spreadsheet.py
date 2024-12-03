@@ -10,3 +10,9 @@ class Spreadsheet:
 
     def _create_empty_grid(self, n_columns, n_rows):
         self.grid = [[None for col_i in range(n_columns)] for row_i in range(n_rows)]
+
+    def __str__(self):
+        pass
+
+    def change_(self, address: str, value: str):
+        pass
